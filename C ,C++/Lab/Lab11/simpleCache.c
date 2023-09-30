@@ -34,6 +34,7 @@ cache_t *init_cache(int size){
     cache_t *cache = (cache_t*)malloc(sizeof(cache_t));
     cache->cache_size = size;
     cache->table = calloc(size, sizeof(cell_t));
+    //init all data value as -1 
     for(int i = 0 ; i<size ; i++){
         cache->table[i] = createCell_t(-1,-1);
     }
@@ -44,15 +45,18 @@ void get_data(int addr, memory_t *memory, cache_t *cache){
     unsigned int cache_index = addr % cache->cache_size;
     unsigned int data = memory[addr];
 
+    //case 1 
     if(cache->table[cache_index].data == -1){
         printf("Load from memory\nData: %d\n", data);
         cache->table[cache_index].data = data;
         cache->table[cache_index].mem_addr = addr;
     }
     else if(cache->table[cache_index].data != -1){
+        //case 3
         if(cache->table[cache_index].data == data){
             printf("Address %d is loaded\nData: %d\n", addr, cache->table[cache_index].data);
         }
+        //case 2
         else{
             printf("Index: %d is used\nLoad from memory\nData: %d\n", cache_index, data);
             cache->table[cache_index].data = data;
